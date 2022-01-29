@@ -156,7 +156,7 @@ if (isset($_POST['ajax'])) {
 		
 	//Save File
 	if(isset($_POST['data'])) {
-		error_log(var_export($_REQUEST,true));
+		// error_log(var_export($_REQUEST,true));
 		$path = FM_ROOT_PATH;
 		if (FM_PATH != '') $path .= '/' . FM_PATH;
 		$file_path = $path . '/' . fm_clean_path($_GET['f']);
@@ -603,7 +603,7 @@ $folders = [];
 $files = [];
 if (is_array($objects)) {
 	foreach ($objects as $file) {
-		if ($file == '.' || $file == '..' && in_array($file, $GLOBALS['exclude_folders'])) {
+		if ($file == '.' || $file == '..' || in_array($file, $GLOBALS['exclude_folders'])) {
 			continue;
 		}
 		if (!FM_SHOW_HIDDEN && substr($file, 0, 1) === '.') {
