@@ -1663,7 +1663,7 @@ function fm_load_ace() {
 	} else {
 		return;
 	}
-	$ace_version = "1.4.13";
+	$ace_version = "1.4.14";
 	
 	echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/{$ace_version}/ace.min.js'></script>";
 	
