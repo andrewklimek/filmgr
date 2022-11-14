@@ -13,6 +13,7 @@ $use_auth = true;
 $conf_file = __DIR__ . '/.filmgr.conf';
 $conf = @file_get_contents($conf_file);
 $conf = $conf ? json_decode($conf) : (object)[];
+$recent = !empty( $conf->recent ) ? (array) $conf->recent : [];
 
 $show_hidden_files = true;
 
@@ -758,7 +759,7 @@ if (isset($_GET['pad'])) {
 if (isset($_GET['f'])) {
 
 	$file = fm_clean_path($_GET['f']);
-
+	
 	if ($file == '' || !is_file($path . '/' . $file)) {
 		fm_set_msg('File not found', 'error');
 		fm_redirect(FM_SELF_URL . '?p=' . urlencode(FM_PATH));
@@ -766,7 +767,7 @@ if (isset($_GET['f'])) {
 
 	fm_header($file);
 	
-	// fm_path();
+	fm_add_recent_dir();
 
 	$file_uri = (FM_PATH != '' ? '/' . FM_PATH : '') . '/' . $file;
 	$file_url = FM_ROOT_URL . $file_uri;
@@ -787,7 +788,7 @@ if (isset($_GET['f'])) {
 		}
 
 		$menu_items = "<a onclick=\"backup('". urlencode($path) ."','". urlencode($file) ."')\">Backup</a> ";
-		echo $file_uri;
+
 		if ( $file_uri == $_SERVER['PHP_SELF'] ) {
 			$menu_items .= "<a>Can’t edit self!</a>";
 		} else {
@@ -962,8 +963,14 @@ if (isset($_GET['chmod'])) {
 fm_header( array_reverse(explode('/',$path))[0] );
 fm_header_menu('main');
 fm_message();
-fm_path();
 
+echo "<div id=recent><p><b>Recent Locations</b>";
+foreach( $recent as $link ) {
+	echo '<p><a href="?p='. urlencode($link) .'">' . str_replace( '/', ' / ', fm_enc($link) ) . '</a>';
+}
+echo "</div><div id=explorer>";
+
+fm_path();
 ?>
 <form action="" method=post>
 <input type=hidden name=p value="<?php echo fm_enc(FM_PATH) ?>">
@@ -975,7 +982,8 @@ fm_path();
 <td><?php echo count($files) + count($folders) ?> items
 <td class=right style=width:6em>Size
 <td style=width:9em>Modified
-<td style=width:3em>Perms<td style=width:17em>Owner
+<td style=width:3em>Perms
+<td>Owner
 <!--<td style="width:17em">Actions</div>-->
 <?php
 foreach ($folders as $f) {
@@ -1091,7 +1099,7 @@ document.querySelector('#main-table').addEventListener('click',function(e){
 </script>
 
 </form>
-
+</div>
 <?php
 fm_footer();
 
@@ -1544,7 +1552,7 @@ class FM_Zipper
  * Show current path
  * @param string $path
  */
-function fm_path()
+function fm_path($echo=true)
 {
 	$path = fm_clean_path(FM_PATH);
 	$breadcrumb = "<a href='?p=' title='" . FM_ROOT_PATH . "'>home</a>";
@@ -1557,7 +1565,23 @@ function fm_path()
 		}
 		$breadcrumb .= ' / ' . implode(' / ', $links) . ' /&nbsp;';
 	}
-	echo "<div id=breadcrumb>{$breadcrumb}</div>";
+	if ( $echo ) echo "<div id=breadcrumb>{$breadcrumb}</div>";
+	else return $breadcrumb;
+}
+
+
+/**
+ * Add links to conf file for parent directories of recently opened files
+ */
+function fm_add_recent_dir()
+{
+	if ( $path = fm_clean_path(FM_PATH) ) {
+		global $recent, $conf, $conf_file;
+		$link = trim($path,'/');
+		$recent = array_merge( [$link], array_diff( $recent, [$link] ) );// remove if exists and put back on top
+		$conf->recent = array_slice( $recent, 0, 10 );
+		file_put_contents($conf_file, json_encode($conf));
+	}
 }
 
 
@@ -1897,7 +1921,7 @@ textarea[name=savedata] {
     color: #777;
 }
 
-@media (max-width:800px) {
+@media (max-width:782px) {
 	#main-table td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)),
 	#logo,
 	.main-nav #breadcrumb,
@@ -1912,6 +1936,17 @@ textarea[name=savedata] {
 	}
 	body {
 		padding: 0;
+	}
+}
+
+@media(min-width:783px){
+	#recent {
+		float: left;
+		width: 30%;
+	}
+	#explorer {
+		float: left;
+		width: 70%;
 	}
 }
 </style>
