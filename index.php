@@ -1616,7 +1616,7 @@ function fm_message()
 {
 	if (isset($_SESSION['message'])) {
 		$class = isset($_SESSION['status']) ? $_SESSION['status'] : 'ok';
-		echo '<p class="message ' . $class . '">' . $_SESSION['message'] . '</p>';
+		echo '<p class="message ' . $class . '"><span>' . $_SESSION['message'] . '</span></p>';
 		unset($_SESSION['message']);
 		unset($_SESSION['status']);
 	}
@@ -1920,7 +1920,13 @@ textarea[name=savedata] {
     font-weight: 700;
     color: #777;
 }
-
+.message {
+    text-align: center;
+}
+.message>span {
+    padding: 8px;
+    background: #fff;
+}
 @media (max-width:782px) {
 	#main-table td:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)),
 	#logo,
@@ -1935,7 +1941,7 @@ textarea[name=savedata] {
 		font-size: 10px;
 	}
 	body {
-		padding: 0;
+		padding: 12px 0;
 	}
 }
 
