@@ -2,6 +2,9 @@
 /**
  * filmgr - a minimalist web-based file manager
  * github.com/andrewklimek/filmgr
+ * 
+ * Editor Key Commands:
+ * https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts
  */
 
 ini_set( 'log_errors', 1 );
@@ -1687,7 +1690,7 @@ function fm_load_ace() {
 	} else {
 		return;
 	}
-	$ace_version = "1.4.14";
+	$ace_version = "1.35.2";
 	
 	echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/{$ace_version}/ace.min.js'></script>";
 	
