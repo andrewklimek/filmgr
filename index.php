@@ -1839,9 +1839,15 @@ tr:not(.th):hover {
     position: absolute;
     top: 43px;
     bottom: 0;
-    left: 0;
     right: 0;
+    width: 100%;
 	font-size: 14px;
+}
+@media(min-width:1400px) {
+	#editor {
+		width: 86%;
+		font-size: 16px;
+	}
 }
 .btn,
 [type=submit] {
