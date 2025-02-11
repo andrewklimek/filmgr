@@ -7,16 +7,12 @@
  * https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts
  */
 
-ini_set( 'log_errors', 1 );
-ini_set( 'error_log', __DIR__ . '/filmgr.log' );
-	
+// ini_set( 'log_errors', 1 );
+// ini_set( 'error_log', __DIR__ . '/filmgr.log' );
+// define( 'FM_EMBED', true );
+
 // Auth with login/password
 $use_auth = true;
-
-$conf_file = __DIR__ . '/.filmgr.conf';
-$conf = @file_get_contents($conf_file);
-$conf = $conf ? json_decode($conf) : (object)[];
-$recent = !empty( $conf->recent ) ? (array) $conf->recent : [];
 
 $show_hidden_files = true;
 
@@ -45,6 +41,11 @@ $upload_extensions = ''; // 'gif,png,jpg'
 $GLOBALS['exclude_folders'] = [];
 
 //--- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL
+
+$conf_file = $root_path . '/.filmgr.conf';
+$conf = @file_get_contents($conf_file);
+$conf = $conf ? json_decode($conf) : (object)[];
+$recent = !empty( $conf->recent ) ? (array) $conf->recent : [];
 
 // if fm included
 if (defined('FM_EMBED')) {
