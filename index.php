@@ -1691,9 +1691,8 @@ function fm_load_ace() {
 	} else {
 		return;
 	}
-	$ace_version = "1.37.5";
 	
-	echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/{$ace_version}/ace.min.js'></script>";
+	echo "<script src='https://cdn.jsdelivr.net/npm/ace-builds@1/src-min-noconflict/ace.js'></script>";
 	
 	$dot = strrpos( $file , '.' );// if only . is at the beginning (.htaccess) $dot will be 0 and fail the conditional in next lie, which is ideal.
 	$ext = $dot ? substr( $file , 1+$dot ) : 'txt';
@@ -1708,15 +1707,15 @@ function fm_load_ace() {
 	}
 	elseif ( ! in_array( $ext, $plain_exts ) )// if not plain, auto detect using ACE modelist
 	{
-		echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/{$ace_version}/ext-modelist.min.js'></script>";
+		echo "<script src='https://cdn.jsdelivr.net/npm/ace-builds@1/src-min-noconflict/ext-modelist.js'></script>";
 		$setmode = "
 		var modelist = ace.require('ace/ext/modelist');
 		var mode = modelist.getModeForPath('{$file }').mode;
 		editor.session.setMode(mode);";
 	}
 
-	echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/{$ace_version}/ext-language_tools.min.js'></script>";
-	echo "<script>ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/{$ace_version}/');
+	echo "<script src='https://cdn.jsdelivr.net/npm/ace-builds@1/src-min-noconflict/ext-language_tools.js'></script>";
+	echo "<script>ace.config.set('basePath', 'https://cdn.jsdelivr.net/npm/ace-builds@1/src-min-noconflict/');
 	var editor = ace.edit('editor');
 	editor.setShowPrintMargin(false);
 	editor.focus();
